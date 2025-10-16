@@ -268,6 +268,8 @@ Git跟踪并管理的是修改，而非文件。
 
 已经在本地创建了一个Git仓库后，又想在GitHub创建一个Git仓库，并且让这两个仓库进行远程同步，这样，GitHub上的仓库既可以作为备份，又可以让其他人通过该仓库来协作。
 
+#### 关联远程库
+
 在本地的仓库下运行命令：
 
 ```bash
@@ -278,7 +280,7 @@ git remote add origin git@github.com:username/projectname.git
 
 git remote add origin git@github.com:zhouzheyu/Commands.git
 
-把本地库的所有内容推送到远程库上：
+#### 推送远程库
 
 ```bash
 git push -u origin main
