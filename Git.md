@@ -271,3 +271,5 @@ Git跟踪并管理的是修改，而非文件。
 `$ git remote add origin git@github.com:username/projectname.git`
 
 添加后，远程库的名字就是`origin`，这是Git默认的叫法，也可以改成别的，但是`origin`这个名字一看就知道是远程库。
+
+git remote add origin git@github.com:zhouzheyu/Commands.git
