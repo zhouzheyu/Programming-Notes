@@ -252,11 +252,13 @@ Git跟踪并管理的是修改，而非文件。
 
 如果看到类似文件：id_ed25519    id_ed25519.pub，说明已经有 SSH 密钥，可以直接使用。
 
-首次配置，需要生成 SSH Key（ed25519）：`ssh-keygen -t ed25519 -C "your_email@example.com"`
+首次配置，需要生成 SSH Key（ed25519）：`ssh-keygen -t ed25519 -C "your_email@example.com"`。
+
+一般对这个Key无需设置密码。
 
 复制公钥：`pbcopy < ~/.ssh/id_ed25519.pub`
 
-登陆GitHub，添加SSH Key。
+登陆GitHub，添加SSH Key，粘贴公钥。
 
 为什么GitHub需要SSH Key呢？因为GitHub需要识别出你推送的提交确实是你推送的，而不是别人冒充的，而Git支持SSH协议，所以，GitHub只要知道了你的公钥，就可以确认只有你自己才能推送。
 
@@ -268,8 +270,39 @@ Git跟踪并管理的是修改，而非文件。
 
 在本地的仓库下运行命令：
 
-`$ git remote add origin git@github.com:username/projectname.git`
+```bash
+git remote add origin git@github.com:username/projectname.git 
+```
 
-添加后，远程库的名字就是`origin`，这是Git默认的叫法，也可以改成别的，但是`origin`这个名字一看就知道是远程库。
+添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的，但是origin这个名字一看就知道是远程库。
 
 git remote add origin git@github.com:zhouzheyu/Commands.git
+
+把本地库的所有内容推送到远程库上：
+
+```bash
+git push -u origin main
+```
+
+-u：首次推出main分支，不仅把本地的main分支内容推送的远程新的main分支，还会把本地的main分支和远程的main分支关联起来，在以后的推送或者拉取时就可以简化命令。
+
+从现在起，只要本地作了提交，就可以通过命令：
+
+```bash
+git push origin main
+```
+
+查看远程库信息`git remote -v`：
+
+```bash
+$ git remote -v
+origin  git@github.com:username/projectname.git (fetch)
+origin  git@github.com:username/projectname.git (push)
+```
+
+删除远程库`git remote rm <name>`：
+
+```bash
+$ git remote rm origin
+```
+

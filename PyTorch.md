@@ -1,4 +1,4 @@
-# Pytorch
+# PyTorch
 
 一般的训练代码编写套路：
 
