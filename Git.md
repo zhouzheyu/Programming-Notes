@@ -254,13 +254,13 @@ Git跟踪并管理的是修改，而非文件。
 
 首次配置，需要生成 SSH Key（ed25519）：`ssh-keygen -t ed25519 -C "your_email@example.com"`。
 
-一般对这个Key无需设置密码。
+**一般对这个Key无需设置密码。**
 
 复制公钥：`pbcopy < ~/.ssh/id_ed25519.pub`
 
 登陆GitHub，添加SSH Key，粘贴公钥。
 
-为什么GitHub需要SSH Key呢？因为GitHub需要识别出你推送的提交确实是你推送的，而不是别人冒充的，而Git支持SSH协议，所以，GitHub只要知道了你的公钥，就可以确认只有你自己才能推送。
+为什么GitHub需要SSH Key呢？因为GitHub需要**识别出你推送的提交确实是你推送的**，而不是别人冒充的，而Git支持SSH协议，所以，GitHub只要知道了你的公钥，就可以确认只有你自己才能推送。
 
 当然，GitHub允许你添加多个Key。假定你有若干电脑，你一会儿在公司提交，一会儿在家里提交，只要把每台电脑的Key都添加到GitHub，就可以在每台电脑上往GitHub推送了。
 
@@ -278,7 +278,7 @@ git remote add origin git@github.com:username/projectname.git
 
 添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的，但是origin这个名字一看就知道是远程库。
 
-git remote add origin git@github.com:zhouzheyu/Commands.git
+git remote add origin git@github.com:zhouzheyu/CS336.git
 
 #### 推送远程库
 
@@ -286,7 +286,9 @@ git remote add origin git@github.com:zhouzheyu/Commands.git
 git push -u origin main
 ```
 
--u：首次推出main分支，不仅把本地的main分支内容推送的远程新的main分支，还会把本地的main分支和远程的main分支关联起来，在以后的推送或者拉取时就可以简化命令。
+* -u：首次推出main分支，不仅把本地的main分支内容推送的远程新的main分支，并关联本地和远程的main分支。
+* origin：远程库名
+* main：分支名
 
 从现在起，只要本地作了提交，就可以通过命令：
 
@@ -294,17 +296,145 @@ git push -u origin main
 git push origin main
 ```
 
-查看远程库信息`git remote -v`：
+#### 查看远程库信息
 
 ```bash
-$ git remote -v
+git remote -v
 origin  git@github.com:username/projectname.git (fetch)
 origin  git@github.com:username/projectname.git (push)
 ```
 
-删除远程库`git remote rm <name>`：
+#### 删除远程库
 
 ```bash
-$ git remote rm origin
+git remote rm origin
+```
+
+### 从远程库克隆
+
+在GitHub上克隆项目到本地之后，**自动完成**：
+
+* 初始化Git仓库：创建一个.git目录。
+* 设置好远程仓库地址（origin）。
+* 自动关联默认分支（通常是 main）。
+
+```bash
+git clone git@github.com:username/projectname.git
+Cloning into 'gitskills'...
+remote: Counting objects: 3, done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 3
+Receiving objects: 100% (3/3), done.
+```
+
+## 分支管理
+
+### 创建与合并分支
+
+HEAD指向的是当前分支，默认的是main指针。
+
+创建分支，就是新增一个指针，然后再把HEAD指向这个指针。
+
+合并分支，最简单的办法，就是把main指针指向当前指针的当前提交。
+
+删除分支，就是删除指针。
+
+#### git checkout -b name
+
+创建并切换分支，-b表示创建并切换。
+
+```bash
+git checkout -b dev
+```
+
+等价于以下两条指令：
+
+```bash
+git branch dev
+git checkout dev
+```
+
+#### git branch (name)
+
+列出当前所有分支，当前分支前面会标一个*号。
+
+如果后面跟分支名的话就表示创建。
+
+```bash
+$ git branch
+* dev
+  master
+```
+
+#### git checkout name
+
+切换分支。
+
+```bash
+$ git checkout master
+Switched to branch 'master'
+```
+
+#### git merge name
+
+把指定分支的成果合并到**当前分支（也就是HEAD指向的分支）**上：
+
+也就是更改分支指针和HEAD指针。
+
+```bash
+$ git merge dev
+Updating d46f35e..b17d20e
+Fast-forward
+ readme.txt | 1 +
+ 1 file changed, 1 insertion(+)
+```
+
+#### git branch -d name
+
+删除分支。
+
+
+
+### 解决冲突
+
+
+
+### 分支管理策略
+
+
+
+### Bug分支
+
+
+
+### Feature分支
+
+
+
+### 多人协作
+
+
+
+### Rebase
+
+
+
+## 其他
+
+### 远程仓库默认创建了README
+
+* 先拉取远程README：
+
+```bash
+git pull origin main --rebase
+```
+
+相当于从远程仓库 `origin` 拉取（fetch）`main` 分支的最新提交到本地：`git fetch origin main`
+
+之后用 rebase 把本地提交“接在”远程提交之后：`git rebase origin/main`
+
+* 然后再推送：
+
+```bash
+git push -u origin main
 ```
 
