@@ -151,7 +151,7 @@ Date:   Fri May 18 20:59:18 2018 +0800
     wrote a readme file
 ```
 
-`git log --pretty=oneline`：简化查看
+#### git log --pretty=oneline
 
 ```bash
 $ git log --pretty=oneline
@@ -159,6 +159,10 @@ $ git log --pretty=oneline
 e475afc93c209a690c39c13a46716e8fa000c366 add distributed
 eaadf4e385e865d25c48e7ca9c8395c3f7dfaef0 wrote a readme file
 ```
+
+#### git log --oneline --decorate --graph --all
+
+查看git commit分支树。
 
 #### git reset --hard xxx
 
@@ -230,6 +234,18 @@ Git跟踪并管理的是修改，而非文件。
 
 `git restore -- file`命令中的`--`很重要。`--`是 Git 命令解析里“**分隔符**”，它告诉Git，从这里开始，后面的是文件名，不是分支名或参数。
 
+* 撤销单个文件的修改：`git restore -- file`
+* 撤销多个文件的修改：`git restore -- file1 file2 file3`
+* 撤销所有修改：`git restore -- .`
+
+#### git restore --staged -- file
+
+将暂存区的内容还原成版本库的内容。
+
+* `git restore --staged -- file`
+* `git restore --staged -- file1 file2 file3`
+* `git restore --staged -- .`
+
 ### 删除文件
 
 #### rm file
@@ -253,6 +269,8 @@ Git跟踪并管理的是修改，而非文件。
 如果看到类似文件：id_ed25519    id_ed25519.pub，说明已经有 SSH 密钥，可以直接使用。
 
 首次配置，需要生成 SSH Key（ed25519）：`ssh-keygen -t ed25519 -C "your_email@example.com"`。
+
+在已有的基础上生成一把新SSH Key：`ssh-keygen -t ed25519 -C "nju" -f ~/.ssh/id_ed25519_nju`
 
 **一般对这个Key无需设置密码。**
 
@@ -290,13 +308,22 @@ git push -u origin main
 * origin：远程库名
 * main：分支名
 
-从现在起，只要本地作了提交，就可以通过命令：
+从现在起，只要本地作了提交，就可以通过命令推送指定分支：
 
 ```bash
 git push origin main
 ```
 
+并不是一定要把所有本地分支往远程推送，那么，哪些分支需要推送，哪些不需要呢？
+
+- `master`分支是主分支，因此要时刻与远程同步；
+- `dev`分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步；
+- bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug；
+- feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
+
 #### 查看远程库信息
+
+显示可以抓取和推送的`origin`仓库的地址。如果没有推送权限，就看不到push的地址。
 
 ```bash
 git remote -v
@@ -312,11 +339,15 @@ git remote rm origin
 
 ### 从远程库克隆
 
+如果要克隆的是别人的项目，首先点“Fork”，然后在自己账号下克隆。
+
 在GitHub上克隆项目到本地之后，**自动完成**：
 
 * 初始化Git仓库：创建一个.git目录。
 * 设置好远程仓库地址（origin）。
 * 自动关联默认分支（通常是 main）。
+
+如果希望他人接收自己的修改，可以在GitHub上发起一个pull request。
 
 ```bash
 git clone git@github.com:username/projectname.git
@@ -325,6 +356,16 @@ remote: Counting objects: 3, done.
 remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 3
 Receiving objects: 100% (3/3), done.
 ```
+
+### git pull
+
+最常用的：
+
+```bash
+git pull origin main --rebase
+```
+
+先从 origin/main 拉最新提交，再把你本地的提交“接在它后面”，不产生 merge commit，历史保持线性。
 
 ## 分支管理
 
@@ -338,20 +379,9 @@ HEAD指向的是当前分支，默认的是main指针。
 
 删除分支，就是删除指针。
 
-#### git checkout -b name
+#### git switch -c name
 
-创建并切换分支，-b表示创建并切换。
-
-```bash
-git checkout -b dev
-```
-
-等价于以下两条指令：
-
-```bash
-git branch dev
-git checkout dev
-```
+创建并切换分支，-c表示创建并切换。
 
 #### git branch (name)
 
@@ -365,20 +395,18 @@ $ git branch
   master
 ```
 
-#### git checkout name
+#### git switch name
 
 切换分支。
 
 ```bash
-$ git checkout master
+$ git switch master
 Switched to branch 'master'
 ```
 
 #### git merge name
 
-把指定分支的成果合并到**当前分支（也就是HEAD指向的分支）**上：
-
-也就是更改分支指针和HEAD指针。
+指定分支更新，把指定分支的历史提交合并到**当前分支（HEAD）**。
 
 ```bash
 $ git merge dev
@@ -392,51 +420,52 @@ Fast-forward
 
 删除分支。
 
-
-
 ### 解决冲突
 
+同一初始版本下的两个分支对同一个地方进行了不同修改，之后main分支要合并到dev分支上，会发生冲突。文件内容更新为：
 
+```bash
+<<<<<<< HEAD
+print("This is the main branch")
+=======
+print("This is the dev branch")
+>>>>>>> dev
+```
+
+需要手动编辑文件，删除这些标记，并保留想要的内容。
+
+之后重新提交。
+
+如果觉得冲突太多、不想继续合并：
+
+```bash
+git merge --abort
+```
 
 ### 分支管理策略
 
+#### git merge --no-ff -m "merge with no-ff" name
 
+强制创建一个 merge commit，从而在历史里保留“这个分支曾经存在过并被合并”的痕迹。
 
 ### Bug分支
 
+#### git stash
 
+当要修复另一分支的bug，但是当前分支的任务还没完成，临时存储工作现场：`git stash`。
+
+查看：`git stash list`。
+
+之后切换到其他分支：`git switch f1`。
+
+回到当前分支：`git switch f2`，恢复工作现场并删除stash内容：`git stash pop`。
 
 ### Feature分支
 
+#### git branch -D name
 
-
-### 多人协作
-
-
+强制删除未合并的分支。
 
 ### Rebase
 
-
-
-## 其他
-
-### 远程仓库默认创建了README
-
-* 先拉取远程README：
-
-```bash
-git pull origin main --rebase
-```
-
-相当于从远程仓库 `origin` 拉取（fetch）`main` 分支的最新提交到本地：`git fetch origin main`
-
-之后用 rebase 把本地提交“接在”远程提交之后：`git rebase origin/main`
-
-* 然后再推送：
-
-```bash
-git push -u origin main
-```
-
-1111
 
