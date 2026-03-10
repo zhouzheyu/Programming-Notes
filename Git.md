@@ -188,7 +188,7 @@ HEAD is now at 83b0afe append GPL
 
 #### git reflog
 
-记录每一条历史命令，最前面的是commit id
+记录每一条历史命令，包括当HEAD已经回退到以前版本时的最新命令，最前面的是commit id。
 
 ```bash
 $ git reflog
@@ -448,6 +448,12 @@ git merge --abort
 
 强制创建一个 merge commit，从而在历史里保留“这个分支曾经存在过并被合并”的痕迹。
 
+### git log --graph --decorate --oneline --all
+
+查看分支树
+
+
+
 ### Bug分支
 
 #### git stash
@@ -467,5 +473,4 @@ git merge --abort
 强制删除未合并的分支。
 
 ### Rebase
-
 

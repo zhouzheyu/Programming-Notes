@@ -1,23 +1,19 @@
 # os
 
-## os.listdir
+## 路径操作
 
-os.listdir(path): 
+* os.listdir(path)
+* os.makedirs(path, exist_ok=True)
+* os.path.exists(path)
+* os.path.join(a, b)
 
+## 环境变量
 
+指定GPU ID：
 
-## os.makedirs
-
-os.makedirs(path, exist_ok=True): 
-
-
-
-## os.path.exists
-
-os.path.exists(path)
-
+```python
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+```
 
 
-## os.path.join
 
-os.path.join(a, b)

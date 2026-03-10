@@ -6,6 +6,121 @@ https://liaoxuefeng.com/books/python/introduction/index.html
 
 切片、迭代、列表推导式、generator生成器、函数式编程（map reduce filter sorted lambda decorator partial）、
 
+## 语法/杂项
+
+### 类型判断isinstance()
+
+```python
+# 字符串
+isinstance("abc", str)           # ✅ True
+
+# 数值类型
+isinstance(123, int)             # ✅ True
+isinstance(3.14, float)          # ✅ True
+isinstance(2+3j, complex)        # ✅ True
+
+# 布尔类型
+isinstance(True, bool)           # ✅ True
+
+# 列表 / 元组 / 字典 / 集合
+isinstance([1, 2, 3], list)      # ✅ True
+isinstance((1, 2, 3), tuple)     # ✅ True
+isinstance({"a": 1}, dict)       # ✅ True
+isinstance({1, 2, 3}, set)       # ✅ True
+
+# 多类型判断（用元组）
+x = 3.14
+isinstance(x, (int, float))      # ✅ True：只要是其中一个类型就返回 True
+
+# 是否是可迭代对象
+isinstance([], Iterable)
+
+# 是否是迭代器
+isinstance([], Iterator)
+```
+
+### 切片
+
+前两个表示边界、最后一个表示步长。
+
+### 迭代
+
+range在for循环中的应用：
+
+```python
+# 起点，终点，步长
+for i in range(start, stop, step):
+    ...
+```
+
+enumerate在for循环中的应用：
+
+```python
+# 返回的是idx索引（从0开始）和对应的元素
+for idx , element in enumerate(data):
+    ...
+```
+
+zip在for循环中的应用：
+
+```python
+list1 = []
+list2 = []
+# 同步迭代多个列表
+# 如果列表长度不同，zip() 只会匹配最短长度，多余的元素会被丢弃
+for element1, element2 in zip(list1, list 2):
+    ...
+```
+
+enumerate和zip在for循环中结合使用：
+
+```python
+for step, (stream,replay) in enumerate(zip(stream_train_dataloader,replay_train_dataloader)):
+```
+
+### 列表推导式
+
+```
+a = [x for ... if ...]
+```
+
+### 生成器 generator
+
+是一种可迭代对象，返回`Iterator`对象表示的是一次性数据流，能迭代但不直接显示内容。
+
+相比列表生成式，一边计算，一边逐个产出数据，而且只能用一次，节省内存。
+
+#### 用 yield 定义生成器函数
+
+调用它不会立即执行，而是返回一个生成器对象。
+
+执行过程：每次循环调用 `next(gen)`，函数从上次的 `yield` 处继续执行。
+
+```python
+def func(n):
+    a = [1]
+    for _ in range(n):
+        yield a
+        a = [1] + [a[i] + a[i + 1] for i in range(len(a) - 1)] +[1]
+
+if __name__ == '__main__':
+    fn = func(6)
+    for d in fn:
+        print(d)
+```
+
+#### 用生成器表达式（类似列表推导式）
+
+```python
+gen = (x**2 for x in range(5))
+print(gen)  # <generator object <genexpr> at ...>
+
+for val in gen:
+    print(val)
+```
+
+
+
 ## 数据结构
 
 ### 字符串string
@@ -242,119 +357,6 @@ even_squares = {x: x**2 for x in range(6) if x % 2 == 0}
 print(even_squares)  # {0:0, 2:4, 4:16}
 ```
 
-## 语法/杂项
-
-### 类型判断isinstance()
-
-```python
-# 字符串
-isinstance("abc", str)           # ✅ True
-
-# 数值类型
-isinstance(123, int)             # ✅ True
-isinstance(3.14, float)          # ✅ True
-isinstance(2+3j, complex)        # ✅ True
-
-# 布尔类型
-isinstance(True, bool)           # ✅ True
-
-# 列表 / 元组 / 字典 / 集合
-isinstance([1, 2, 3], list)      # ✅ True
-isinstance((1, 2, 3), tuple)     # ✅ True
-isinstance({"a": 1}, dict)       # ✅ True
-isinstance({1, 2, 3}, set)       # ✅ True
-
-# 多类型判断（用元组）
-x = 3.14
-isinstance(x, (int, float))      # ✅ True：只要是其中一个类型就返回 True
-
-# 是否是可迭代对象
-isinstance([], Iterable)
-
-# 是否是迭代器
-isinstance([], Iterator)
-```
-
-### 切片
-
-前两个表示边界、最后一个表示步长。
-
-### 迭代
-
-range在for循环中的应用：
-
-```python
-# 起点，终点，步长
-for i in range(start, stop, step):
-    ...
-```
-
-enumerate在for循环中的应用：
-
-```python
-# 返回的是idx索引（从0开始）和对应的元素
-for idx , element in enumerate(data):
-    ...
-```
-
-zip在for循环中的应用：
-
-```python
-list1 = []
-list2 = []
-# 同步迭代多个列表
-# 如果列表长度不同，zip() 只会匹配最短长度，多余的元素会被丢弃
-for element1, element2 in zip(list1, list 2):
-    ...
-```
-
-enumerate和zip在for循环中结合使用：
-
-```python
-for step, (stream,replay) in enumerate(zip(stream_train_dataloader,replay_train_dataloader)):
-```
-
-### 列表推导式
-
-```
-a = [x for ... if ...]
-```
-
-### 生成器 generator
-
-是一种可迭代对象，返回`Iterator`对象表示的是一次性数据流，能迭代但不直接显示内容。
-
-相比列表生成式，一边计算，一边逐个产出数据，而且只能用一次，节省内存。
-
-#### 用 yield 定义生成器函数
-
-调用它不会立即执行，而是返回一个生成器对象。
-
-执行过程：每次循环调用 `next(gen)`，函数从上次的 `yield` 处继续执行。
-
-```python
-def func(n):
-    a = [1]
-    for _ in range(n):
-        yield a
-        a = [1] + [a[i] + a[i + 1] for i in range(len(a) - 1)] +[1]
-
-if __name__ == '__main__':
-    fn = func(6)
-    for d in fn:
-        print(d)
-```
-
-#### 用生成器表达式（类似列表推导式）
-
-```python
-gen = (x**2 for x in range(5))
-print(gen)  # <generator object <genexpr> at ...>
-
-for val in gen:
-    print(val)
-```
-
 ## 函数式编程
 
 函数式编程的一个特点就是，允许把函数本身作为参数传入另一个函数，还允许返回一个函数。
@@ -565,10 +567,6 @@ bart.name = 'Bart Simpson'
 
 类属性：公共属性，归类所有，但类的所有实例都可以访问到。实例修改，仅对该实例生效，类属性不会消失。
 
-### @property
-
-把调用方法简化为调用属性。
-
 ### init方法
 
 `super().__init__()`：重写父类构造函数，init()里面填父类构造函数的参数
@@ -673,6 +671,42 @@ class Fib(object):
 ### getattr方法
 
 `__getattr__`：用于处理调用的类的方法和属性不存在的情况，可以动态地返回属性和方法
+
+### @dataclass
+
+* 把一堆参数变成一个好用的配置对象
+* 帮助打印、调试、保存
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class TransformerConfig:
+    dim: int = 3840
+    n_layers: int = 30
+    n_heads: int = 30
+    h_ff_ratio: float = 2.6667
+```
+
+等价于Python自动生成：
+
+```python
+def __init__(self, dim=3840, n_layers=30, n_heads=30, h_ff_ratio=2.6667):
+    self.dim = dim
+    self.n_layers = n_layers
+    self.n_heads = n_heads
+    self.h_ff_ratio = h_ff_ratio
+
+def __repr__(self):
+    return "TransformerConfig(dim=..., n_layers=..., ...)"
+
+def __eq__(self, other):
+    ...
+```
+
+### @property
+
+在调用的时候，把调用方法简化为调用属性。
 
 
 
