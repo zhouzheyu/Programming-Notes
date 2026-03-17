@@ -132,10 +132,8 @@ requires_grad=True: 指定参数可求导。
 需要手动指定的场景：
 
 * 迁移学习、微调、LoRA冻结部分层
-* 
 * 让输入也参与梯度
 * 临时关闭梯度计算（推理/评估）
-* detach() 手动切断梯度流
 
 ```python
 # 对于张量需要手动定义
@@ -330,7 +328,7 @@ torch.cat([A, B], dim)：张量的拼接
 
 torch.stack([A, B], dim)：张量的堆叠
 
-### 数据操作
+### 数值操作
 
 torch.zeros_like()：
 
@@ -390,7 +388,14 @@ for name, param in self.named_parameters():
 
 #### model.eval()
 
-切换到评估模式
+切换到评估模式，常和with torch.no_grad()连用，用于在验证集评估性能。
+
+```python
+model.eval()
+
+with torch.no_grad():
+    outputs = model(inputs)
+```
 
 ### nn.Embedding
 

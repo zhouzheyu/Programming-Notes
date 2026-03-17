@@ -160,10 +160,6 @@ e475afc93c209a690c39c13a46716e8fa000c366 add distributed
 eaadf4e385e865d25c48e7ca9c8395c3f7dfaef0 wrote a readme file
 ```
 
-#### git log --oneline --decorate --graph --all
-
-查看git commit分支树。
-
 #### git reset --hard xxx
 
 Git在内部有个指向当前版本的`HEAD`指针，当你回退版本的时候，Git仅仅修改HEAD指向。
@@ -237,14 +233,6 @@ Git跟踪并管理的是修改，而非文件。
 * 撤销单个文件的修改：`git restore -- file`
 * 撤销多个文件的修改：`git restore -- file1 file2 file3`
 * 撤销所有修改：`git restore -- .`
-
-#### git restore --staged -- file
-
-将暂存区的内容还原成版本库的内容。
-
-* `git restore --staged -- file`
-* `git restore --staged -- file1 file2 file3`
-* `git restore --staged -- .`
 
 ### 删除文件
 
@@ -416,9 +404,17 @@ Fast-forward
  1 file changed, 1 insertion(+)
 ```
 
-#### git branch -d name
+#### git branch -D name
 
 删除分支。
+
+#### git branch -m name
+
+修改当前分支名
+
+#### git branch -m name new_name
+
+修改指定分支名称
 
 ### 解决冲突
 
@@ -448,7 +444,7 @@ git merge --abort
 
 强制创建一个 merge commit，从而在历史里保留“这个分支曾经存在过并被合并”的痕迹。
 
-### git log --graph --decorate --oneline --all
+#### git log --graph --decorate --oneline --all
 
 查看分支树
 
