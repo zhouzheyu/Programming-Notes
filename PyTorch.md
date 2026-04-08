@@ -260,7 +260,7 @@ temp1, temp2 = torch.split(tensor, [1, 2], dim = -1)
 print(temp1, temp2)
 ```
 
-数据类型的转换：Y = X.long()
+Y = X.long()：数据类型的转换
 ```python
 import torch
 
@@ -271,10 +271,23 @@ tensor = tensor.long()
 print(tensor)
 ```
 
-求转秩：
+Y = X.mask_fill(mask, value)：把 tensor 中所有 mask == True 的位置，替换成指定的值 value
 
 ```python
-Y = X.t()
+# 比如对padding的部分不参与计算
+enc = self._tokenizer(
+    texts,
+    add_special_tokens=True,
+    max_length=self.prompt_prefix_k,
+    truncation=True,
+    padding="max_length",
+    return_tensors="pt",
+)
+# input_ids, attention_mask: (B, k)
+input_ids = enc["input_ids"].to(self.device)
+attention_mask = enc["attention_mask"].to(self.device)
+
+scaled_e = scaled_e.masked_fill(~attention_mask.bool(), -1e9)
 ```
 
 ### 维度操作
@@ -328,7 +341,7 @@ torch.cat([A, B], dim)：张量的拼接
 
 torch.stack([A, B], dim)：张量的堆叠
 
-### 数值操作
+### 计算操作
 
 torch.zeros_like()：
 
