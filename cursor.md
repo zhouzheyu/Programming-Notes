@@ -1,8 +1,25 @@
 # cursor
 
-https://cursor.com/cn/dashboard
+用户主页：https://cursor.com/cn/dashboard
+
+文档：https://cursor.com/cn/docs
 
 命令面板：cmd + shift + P
+
+### Agent
+
+command + I
+
+**Agengt Tips:**
+
+* plan模式：负责理解需求、拆解任务、给出实现思路/架构设计；不会自动修改代码/执行命令
+* agent模式：改代码和执行命令，注意@的使用。
+* slash指令：快捷指令。比如/pr...
+* 可以给agent传图片
+* Fork Chat：复制当前对话，开一个“分支版本”继续聊
+* roll back: discard changes
+
+
 
 ## 核心概念
 
@@ -20,10 +37,6 @@ https://cursor.com/cn/dashboard
 
 修改tab可以在哪些文件中使用：右下角状态栏。
 
-### Agent
-
-command + I
-
 ### 内联编辑
 
 * 编辑选区
@@ -39,8 +52,6 @@ command + I
   * 可以单文件，也可以拓展到多文件编辑。
 * 后续指令
   * 每次编辑后，添加补充说明并按下 Return 以优化结果。AI 会根据你的反馈更新结果。
-
-
 
 
 
